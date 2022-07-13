@@ -1,0 +1,127 @@
+Mongo db:
+	Mongo db is a no sql database which means no relational database in which the data stores in json(java script notation)and BSON(binary search opertion)
+	format. which is used for high complexity data. it is used to store the unstractured data.
+	mongo db has following constraints:
+		1)Database ==> same as database in sql
+		2)collection => table insql
+		3)document ==> records i.e. rows in a table
+		4)fields
+	Datatypes in mongo db:
+		1)str
+		2)integer
+		3)bool
+		4)array
+		5)double
+		6)timestamp
+		db.<collection-name>.insert({"<field-name>":new Timestamp()})
+		Example:
+			> db.date.insert({"time":new Timestamp(09,11)})
+			  WriteResult({ "nInserted" : 1 }
+		7)bool
+		8)min / max keys
+		9)regular expression
+		10)Date
+		syntax for date datatype:
+			db.<collection-name>.insert({"<field-name>":Date()}) ==> it will give current date as string
+			db.<collection-name>.insert({"<field-name>":new Date()}) ==> it will give current date as date format
+			db.<collection-name>.insert({"<field-name>":new Date("1999-05-10T11:05:10Z")}) ==> it will take date in UTC and give in ITC
+			db.<collection-name>.insert({"<field-name>":new ISODate("1999-05-10T11:05:10Z")}) ==> it will take date in ITC format and given in ISO
+Creating a database:
+	==> in mongo db you no need to create database just you need to use this command 
+			use <database-name>
+			the above command automatically create the database and switched to that database
+			this database won't appear until you create a collection in it
+Create a collection:
+	command:
+	syntax:
+		db.createCollection(<collection-name>)
+		********************** show collections***************** ==> to see the collections in database
+	Example:
+		> db.createCollection("my_col");
+		  { "ok" : 1 }
+		> show collections;
+		  my_col
+		  mycol
+	while createing the collection we have following fields
+	autoindex ==> by default it's true i.e. it will index number to documents automatically
+	capped ==> by default it's false but when you mentioned it as true it will overwrited the document once size exceed
+	size ==> when you mentioned capped as true you need to give the size which means once the size exceeds it will automatically overwrited
+	max ==> maximum number od documents which will insert in capped collection
+	Example:
+		> db.createCollection("mycol2",{capped:true,size:2,max:5});
+		  { "ok" : 1 }
+Deleting the collection:
+	Stntax:
+		db.<collection-name>.drop()
+	Example:
+		> db.mycol2.drop()
+		  true
+Deleting database:
+	before deleting the database first you need to switch in to the database
+	Stntax:
+		db.dropdatabase()
+	Example:
+		
+		> use datatypes;
+		switched to db datatypes
+		> db.dropDatabase();
+		{ "ok" : 1 }
+		> show databases;
+		admin     0.000GB
+		config    0.000GB
+		local     0.000GB
+		students  0.000GB
+		test      0.000GB
+Inserting document in collection:
+	syntax:
+		db.<collection-name>.insert({<fields>:<values>})
+	Example:
+		db.datatypes.insert({"name":"arun kumar",age:23,marks:94.99,"address":{"h-no":"2-73","village":"seethampeta","mdl":"ellandhakunat","district":"karimanagar","pin":505475},"dob":new ISODate("1999-05-10T11:05:20Z"),"married":false,"current_time":new Timestamp(9,18)});
+	here we can insert only one collection at one time or multiple collections at one time
+	The above example was inserting single collection at one time
+	mutltiple collections:
+	syntax:
+		var <var-name>=[{<fileds:values>},{<fields>:<values>...............n}]
+		db.<collection-name>.insertmany(<var-name>)
+	Example:
+		> var students=[{"name":"sai teja","age":24,"marks":89},{"name":"harish s",age:24,"marks":98.99}];
+		> db.students_details.insertMany(students)
+		{
+				"acknowledged" : true,
+				"insertedIds" : [
+						ObjectId("62ce41d755662010806af62d"),
+						ObjectId("62ce41d755662010806af62e")
+				]
+		}
+Querying mongodb documents:
+	To display all in collection table:
+		Stntax:
+			db.<collection-name>.find() ==> to find all documents in collection
+		Example:
+			> db.students_details.find()
+				{ "_id" : ObjectId("62ce418555662010806af62c"), "name" : "arun", "age" : 23, "marks" : 99.94 }
+				{ "_id" : ObjectId("62ce41d755662010806af62d"), "name" : "sai teja", "age" : 24, "marks" : 89 }
+				{ "_id" : ObjectId("62ce41d755662010806af62e"), "name" : "harish s", "age" : 24, "marks" : 98.99 }
+	Querying based on one field:
+		Stntax:
+			db.<collection-name>.find({<field-name>:<value>})
+		Example:
+			> db.students_details.find({"age":24})
+			{ "_id" : ObjectId("62ce41d755662010806af62d"), "name" : "sai teja", "age" : 24, "marks" : 89 }
+			{ "_id" : ObjectId("62ce41d755662010806af62e"), "name" : "harish s", "age" : 24, "marks" : 98.99
+	Querying based on one field but getting only one document:
+		Stntax:
+			db.<collection-name>.findone({<field-name>:<value>})
+		Example:
+			> db.students_details.findOne({"age":24})
+				{
+						"_id" : ObjectId("62ce41d755662010806af62d"),
+						"name" : "sai teja",
+						"age" : 24,
+						"marks" : 89
+				}
+	
+	
+	
+		
+		
