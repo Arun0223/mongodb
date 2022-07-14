@@ -120,8 +120,178 @@ Querying mongodb documents:
 						"age" : 24,
 						"marks" : 89
 				}
+Pretty():
+	Syntax:
+		db.<collection-name>.find().pretty()    ===> it will give the data in very pretty formated way
+	Example:
+		> db.students_details.find({"age":24}).pretty()
+			{
+					"_id" : ObjectId("62ce41d755662010806af62d"),
+					"name" : "sai teja",
+					"age" : 24,
+					"marks" : 89
+			}
+			{
+					"_id" : ObjectId("62ce41d755662010806af62e"),
+					"name" : "harish s",
+					"age" : 24,
+					"marks" : 98.99
+			}
+Where conditions in Querying mongodb documents:
+	==> here we won't use where clause simply we will write conditions
+	1)Equal:
+		Stntax:
+			db.<collection-name>.find({<key>:{$eq:<value>}})
+		Example:
+			> db.students_details.find({"age":{$eq:24}});
+				{ "_id" : ObjectId("62ce41d755662010806af62d"), "name" : "sai teja", "age" : 24, "marks" : 89 }
+				{ "_id" : ObjectId("62ce41d755662010806af62e"), "name" : "harish s", "age" : 24, "marks" : 98.99 }
 	
+	2) lessthan
+		Stntax:
+			db.<collection-name>.find({<key>:{$lt:<value>}}
+		Example:
+			> db.students_details.find({"age":{$lt:25}});
+			{ "_id" : ObjectId("62ce418555662010806af62c"), "name" : "arun", "age" : 23, "marks" : 99.94 }
+			{ "_id" : ObjectId("62ce41d755662010806af62d"), "name" : "sai teja", "age" : 24, "marks" : 89 }
+			{ "_id" : ObjectId("62ce41d755662010806af62e"), "name" : "harish s", "age" : 24, "marks" : 98.99 }
 	
-	
-		
-		
+	3) Greaterthan
+		Stntax:
+			db.<collection-name>.find({<key>:{$gt:<value>}})
+		Example:
+			> db.students_details.find({"age":{$gt:23}});
+			{ "_id" : ObjectId("62ce41d755662010806af62d"), "name" : "sai teja", "age" : 24, "marks" : 89 }
+			{ "_id" : ObjectId("62ce41d755662010806af62e"), "name" : "harish s", "age" : 24, "marks" : 98.99 }
+	4)Lessthan or equal:
+		Stntax:
+			db.<collection-name>.find({<key>:{$lte:<value>}})
+		Example:
+			> db.students_details.find({"age":{$lte:23}}).pretty()
+			{
+					"_id" : ObjectId("62ce418555662010806af62c"),
+					"name" : "arun",
+					"age" : 23,
+					"marks" : 99.94
+			}
+	5)Greaterthan or equal:
+		Stntax:
+			db.<collection-name>.find({<key>:{$gte:<value>}})
+		Example:
+			> db.students_details.find({"age":{$gte:23}}).pretty()
+				{
+						"_id" : ObjectId("62ce418555662010806af62c"),
+						"name" : "arun",
+						"age" : 23,
+						"marks" : 99.94
+				}
+				{
+						"_id" : ObjectId("62ce41d755662010806af62d"),
+						"name" : "sai teja",
+						"age" : 24,
+						"marks" : 89
+				}
+	6) values in array:
+		Stntax:
+			db.<collection-name>.find({"key":{$in:[<value1>,<value2>,<value3>..............<valuen>]}})
+		Example:
+			> db.students_details.find({"age":{$in:[21,22,23]}}).pretty()
+				{
+						"_id" : ObjectId("62ce418555662010806af62c"),
+						"name" : "arun",
+						"age" : 23,
+						"marks" : 99.94
+				}
+	7) values not in array
+		Stntax:
+			db.<collection-name>.find({"key":{$nin:[<value1>,<value2>,<value3>..............<valuen>]}})
+		Example:
+			> db.students_details.find({"age":{$nin:[21,22,23]}}).pretty()
+				{
+						"_id" : ObjectId("62ce41d755662010806af62d"),
+						"name" : "sai teja",
+						"age" : 24,
+						"marks" : 89
+				}
+				{
+						"_id" : ObjectId("62ce41d755662010806af62e"),
+						"name" : "harish s",
+						"age" : 24,
+						"marks" : 98.99
+				}
+Logical operators in mongo db:
+	1) And
+		syntax:
+			db.<collection-name>.find({ $and: [ {<key1>:<value1>}, { <key2>:<value2>} ] })
+		Example:
+			> db.students_details.find({$and:[{"name":"arun","age":23}]})
+			{ "_id" : ObjectId("62ce418555662010806af62c"), "name" : "arun", "age" : 23, "marks" : 99.94 }
+	2) Or:
+		Stntax:
+			>db.mycol.find({$or: [{key1: value1}, {key2:value2}]}).pretty()
+	USING AND OR TOGETHER:
+		syntax:
+			db.<collection-name>.find({<key>:<value>,$or:[{<key>:<value>},{<key>:<value>}]})
+		Example:
+			> db.students_details.find({"name":"arun",$or:[{"age":23},{"village":"mandamarri"}]}).pretty()
+	3) not:
+		syntax:
+			db.<collection-name>.find({<key>:{$not:{<operators>:<value>}}})     ### here operators is nothing bit gt,lt,gte,lte,eq
+		Example:
+			> db.students_details.find({"age":{$not:{$gt:23}}})
+			{ "_id" : ObjectId("62ce418555662010806af62c"), "name" : "arun", "age" : 23, "marks" : 99.94 }
+Update the document in collecion in Mongo db:
+	=> we can use update() and save() methods to update the document in collection
+	Stntax:
+		db.COLLECTION_NAME.update(SELECTION_CRITERIA, UPDATED_DATA)
+		db.students_details
+	Example:
+		> db.students_details.update({"name":"arun"},{$set:{"age":22}});
+		WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+	Save():
+		==> The save method replaces the existing document with new document passed in save() method
+	findOneAndUpdate():
+		==> it will update the existing document
+		Stntax:
+			db.<collection-name>.findOneAndUpdate({<existing-key>:<existing-vale>},{$set:{<new-key>:<new-value>}})
+		Example:
+			> db.students_details.findOneAndUpdate({"age":24},{$set:{"age":25}});
+			{
+					"_id" : ObjectId("62ce41d755662010806af62d"),
+					"name" : "sai teja",
+					"age" : 24,
+					"marks" : 89
+			}
+			> db.students_details.find()
+			{ "_id" : ObjectId("62ce418555662010806af62c"), "name" : "arun", "age" : 22, "marks" : 99.94 }
+			{ "_id" : ObjectId("62ce41d755662010806af62d"), "name" : "sai teja", "age" : 25, "marks" : 89 }
+			{ "_id" : ObjectId("62ce41d755662010806af62e"), "name" : "harish s", "age" : 24, "marks" : 98.99 }
+	updateOne():
+		==> This method update only one record
+		Stntax:
+			db.<collection-name>.updateOne({<key>:<value>},{$set:{<new-key>:<new-value>}})
+		Example:
+			> db.students_details.updateOne({"age":24},{$set:{"age":25}});
+			{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+			> db.students_details.find();
+			{ "_id" : ObjectId("62ce418555662010806af62c"), "name" : "arun", "age" : 22, "marks" : 99.94 }
+			{ "_id" : ObjectId("62ce41d755662010806af62d"), "name" : "sai teja", "age" : 25, "marks" : 89 }
+			{ "_id" : ObjectId("62ce41d755662010806af62e"), "name" : "harish s", "age" : 25, "marks" : 98.99 }
+			{ "_id" : ObjectId("62cfb79b55662010806af62f"), "name" : "kalyan", "age" : 24, "marks" : 99.95 }
+	Updatemany():
+		Stntax:
+			db.<collection-name>.updateMany({"Key":{<operators>:<value>},{$set:{<new-key>:<new-value>}}})   ### operators nothig but eq,gt,gte,lte
+		Example:
+			> db.students_details.updateMany({age:{$gt:22}},{$set:{age:24}});
+				{ "acknowledged" : true, "matchedCount" : 3, "modifiedCount" : 1 }
+				> db.students_details.find();
+				{ "_id" : ObjectId("62ce418555662010806af62c"), "name" : "arun", "age" : 22, "marks" : 99.94 }
+				{ "_id" : ObjectId("62ce41d755662010806af62d"), "name" : "sai teja", "age" : 24, "marks" : 89 }
+				{ "_id" : ObjectId("62ce41d755662010806af62e"), "name" : "harish s", "age" : 24, "marks" : 98.99 }
+				{ "_id" : ObjectId("62cfb79b55662010806af62f"), "name" : "kalyan", "age" : 24, "marks" : 99.95 }
+Deleting document from collecion:
+	Stntax:
+		db.<collection-name>.remove(<deletion criteria>)
+	Example:
+		> db.students_details.remove({"age":25})
+			WriteResult({ "nRemoved" : 3 })
